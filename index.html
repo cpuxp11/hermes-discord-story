@@ -239,14 +239,83 @@
 
   .footer a:hover { border-color: var(--accent); }
 
+  /* Top nav */
+  .top-nav {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .top-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .top-nav a:hover { color: var(--accent); }
+
+  /* Post nav (bottom) */
+  .post-nav {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .post-nav a {
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .post-nav a:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+
+  .post-nav .label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .post-nav .title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.4;
+    word-break: keep-all;
+  }
+
+  .post-nav .next { text-align: right; }
+
   @media (max-width: 640px) {
     .container { padding: 48px 20px 80px; }
     .header h1 { font-size: 26px; }
     .pullquote { font-size: 18px; padding-left: 20px; }
+    .post-nav { flex-direction: column; }
+    .post-nav .next { text-align: left; }
   }
 </style>
 </head>
 <body>
+
+<nav class="top-nav">
+  <a href="https://cpuxp11.github.io/">← 글 목록</a>
+  <a href="https://cpuxp11.github.io/hermes-codex-story/">← 1편: Keychain 이야기</a>
+</nav>
 
 <div class="container">
 
@@ -655,6 +724,17 @@ WARNING gateway.run: ✗ discord failed to connect</span></code></div>
       </table>
     </div>
 
+  </div>
+
+  <div class="post-nav">
+    <a href="https://cpuxp11.github.io/hermes-codex-story/" class="prev">
+      <div class="label">← 이전 글</div>
+      <div class="title">1편. 열쇠를 현관 매트 밑에 숨기는 일에 대하여</div>
+    </a>
+    <a href="https://cpuxp11.github.io/" class="next">
+      <div class="label">글 목록 →</div>
+      <div class="title">전체 글 모음으로</div>
+    </a>
   </div>
 
   <div class="footer">
