@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>맥미니에 심은 AI를 디스코드로 꺼내놓는 법 — 토끼를 분양받았는데, 말을 걸어야 했다</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
+
+  :root {
+    --bg: #fafaf9;
+    --text: #1c1917;
+    --accent: #292524;
+    --muted: #78716c;
+    --border: #e7e5e4;
+    --code-bg: #1e1e1e;
+    --code-text: #d4d4d4;
+    --highlight: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Pretendard Variable', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+  }
+
+  .header { margin-bottom: 64px; }
+
+  .header .category {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.3;
+    color: var(--accent);
+    margin-bottom: 20px;
+    word-break: keep-all;
+  }
+
+  .header .subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+
+  .header .meta {
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .header .meta .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    margin: 48px 0;
+  }
+
+  .content h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 56px 0 20px;
+    color: var(--accent);
+    word-break: keep-all;
+  }
+
+  .content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 40px 0 16px;
+    color: var(--accent);
+  }
+
+  .content p {
+    font-size: 16.5px;
+    margin-bottom: 24px;
+    color: var(--text);
+    word-break: keep-all;
+  }
+
+  .content p.small {
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+
+  .content strong {
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .content em {
+    font-style: normal;
+    background: linear-gradient(transparent 60%, #fde68a 60%);
+    padding: 0 2px;
+  }
+
+  .content ul, .content ol {
+    margin: 0 0 24px 22px;
+  }
+
+  .content li {
+    font-size: 16.5px;
+    margin-bottom: 8px;
+    word-break: keep-all;
+  }
+
+  .pullquote {
+    margin: 48px 0;
+    padding: 32px 0 32px 28px;
+    border-left: 3px solid var(--accent);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--accent);
+    word-break: keep-all;
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0 32px;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--code-text);
+    white-space: pre;
+  }
+
+  .code-block .comment { color: #6a9955; }
+  .code-block .command { color: #dcdcaa; }
+  .code-block .string { color: #ce9178; }
+  .code-block .flag { color: #569cd6; }
+  .code-block .success { color: #4ec9b0; }
+
+  code.inline {
+    background: #f5f5f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13.5px;
+    color: #292524;
+  }
+
+  .comparison {
+    margin: 32px 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .comparison table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+  }
+
+  .comparison th {
+    background: #f5f5f4;
+    padding: 14px 20px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .comparison td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    word-break: keep-all;
+    vertical-align: top;
+  }
+
+  .comparison tr:last-child td { border-bottom: none; }
+
+  .comparison .fail { color: #dc2626; font-weight: 600; }
+  .comparison .pass { color: #16a34a; font-weight: 600; }
+
+  .note {
+    background: #fffbeb;
+    border-left: 3px solid var(--highlight);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 24px 0;
+    font-size: 15px;
+    color: #78350f;
+    word-break: keep-all;
+  }
+
+  .note strong { color: #78350f; }
+
+  .footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer a:hover { border-color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .container { padding: 48px 20px 80px; }
+    .header h1 { font-size: 26px; }
+    .pullquote { font-size: 18px; padding-left: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="category">AI Agent / DevOps — 후속편</div>
+    <h1>맥미니에 심은 AI를 디스코드로 꺼내놓는 법</h1>
+    <p class="subtitle">토끼를 분양받았는데, 말을 걸어야 했다.</p>
+    <div class="meta">
+      <span>최병찬</span>
+      <span class="dot"></span>
+      <span>2026.04.19</span>
+      <span class="dot"></span>
+      <span>15분</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="content">
+
+    <p>이상한 일이다.</p>
+
+    <p>AI를 맥미니에 심어놓고 한 달쯤 지나니까, 심어놨다는 사실 자체를 잊어버리게 됩니다. 마치 베란다에 놓은 화분 같은 것이다. 물 줘야지 줘야지 하다가, 어느 날 보면 시들어 있거든요. 그러다 문득 깨닫는 겁니다. <strong>심는 건 쉬운데, 쓰는 게 어렵다.</strong></p>
+
+    <p>지난 글에서 Hermes를 심는 이야기를 썼습니다. 심어두기만 하고 한참 방치했어요. <code class="inline">hermes chat</code> 치면 답은 잘 했거든요. 근데 그걸 터미널 열어서 쓰고 있자니, 이게 뭐하는 짓인가 싶은 거다. 좋은 도구는 내가 도구한테 가는 게 아니라 <em>도구가 나한테 와야 합니다</em>. 스마트폰이 그랬고, 에어팟이 그랬잖아요.</p>
+
+    <p>그래서 나는 토끼를 디스코드에 앉히기로 했습니다.</p>
+
+    <p>제가 만든 AI는 영어 학원의 상담 봇이에요. 토끼 모양으로 설정해뒀고, 🥕 같은 이모지를 쓰고, 말끝에 "~당근!"을 붙이거든요. 원래는 다른 엔진 위에서 디스코드랑 이미 대화하고 있었는데, 그 엔진은 유지보수가 멈춘 지 오래라 Hermes로 옮기기로 한 겁니다.</p>
+
+    <div class="pullquote">
+      토끼의 인격은 그대로 두고, 토끼가 서있는 바닥만 갈아끼우는 일이었다.
+    </div>
+
+    <p>읽고 나면 이런 생각이 드실 겁니다.<br>"설치는 됐는데 쓸 줄을 몰랐어요. 이거 내일 바로 해볼 수 있겠는데?"</p>
+
+    <h2>1부. 일단 Hermes부터 깐다</h2>
+
+    <p>처음 이 글을 보는 사람도 따라 할 수 있게, 설치부터 정리합니다. 지난 글을 쓰고 나서 "실제로 어떻게 깔아요?" 물어본 사람이 7명이었거든요. 그러니까 그 7명에게 한 번에 답해주는 셈 치고 씁니다.</p>
+
+    <h3>Step 1. 설치 스크립트 한 줄</h3>
+
+    <div class="code-block"><code><span class="command">$ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash</span></code></div>
+
+    <p>Linux, macOS, WSL2 전부 먹힙니다. 맥미니에서는 2분쯤 걸리거든요. 끝나면 <code class="inline">~/.local/bin/hermes</code>에 실행 파일이 생기고, <code class="inline">~/.hermes/</code> 폴더에 설정 구조가 펼쳐집니다.</p>
+
+    <p>쉘 다시 불러오는 걸 까먹지 말 것:</p>
+
+    <div class="code-block"><code><span class="command">$ source ~/.zshrc</span></code></div>
+
+    <h3>Step 2. 모델 붙이기</h3>
+
+    <p>지난 글의 주제였던 부분이거든요. 요약하면 두 길.</p>
+
+    <p><strong>옵션 A — OpenAI Codex로 우회</strong></p>
+
+    <div class="code-block"><code><span class="comment"># 1) Codex CLI 설치</span>
+<span class="command">$ npm install -g @openai/codex</span>
+
+<span class="comment"># 2) 브라우저에서 한 번만 로그인</span>
+<span class="command">$ codex login</span>
+
+<span class="comment"># 3) 인증 파일을 맥미니로 복사</span>
+<span class="command">$ scp ~/.codex/auth.json <user>@<맥미니>:~/.codex/auth.json</span></code></div>
+
+    <p>그리고 <code class="inline">~/.hermes/config.yaml</code>의 model 섹션을 바꿉니다:</p>
+
+    <div class="code-block"><code><span class="flag">model:</span>
+  default: <span class="string">openai-codex/gpt-5.4</span>
+  provider: <span class="string">openai-codex</span>
+  base_url: <span class="string">https://openrouter.ai/api/v1</span></code></div>
+
+    <p>정확히 3줄이지만, 어쨌든 3줄이라고 말하고 싶은 것이다.</p>
+
+    <p><strong>옵션 B — OpenRouter API 키</strong></p>
+
+    <div class="code-block"><code><span class="command">$ hermes config set OPENROUTER_API_KEY sk-or-v1-...</span></code></div>
+
+    <p>돈이 붙지만 Keychain 우회 같은 건 할 필요 없거든요. 월 10달러쯤 쓰면 개인 용도로는 충분합니다.</p>
+
+    <h3>Step 3. 잘 깔렸는지 확인</h3>
+
+    <div class="code-block"><code><span class="command">$ hermes chat</span></code></div>
+
+    <p>터미널에서 대화창이 뜨고, 인사하면 인사합니다. 여기까지 오면 <strong>1부 끝</strong>이거든요.</p>
+
+    <div class="pullquote">
+      여기까지가 맥미니에 AI를 "심는" 일이었다. 이제부터는 심은 AI를 "꺼내놓는" 일이다.
+    </div>
+
+    <h2>2부. 디스코드에 봇이라는 모양으로 내어놓기</h2>
+
+    <p>디스코드는 재밌는 공간입니다. 슬랙이 회사의 회의실 같다면, 디스코드는 동아리방 같은 구석이 있거든요. 그래서 여기에 AI 토끼 하나 들여놔도 어색하지 않습니다. 오히려 어울려요.</p>
+
+    <h3>2-1. 디스코드에 "봇의 집" 만들기</h3>
+
+    <p>디스코드에게 "나 봇 하나 돌릴 건데 주민등록증 좀 주세요" 얘기를 해야 합니다. 발급 창구는 여기거든요.</p>
+
+    <p><a href="https://discord.com/developers/applications">https://discord.com/developers/applications</a></p>
+
+    <p><strong>New Application</strong> 눌러서 이름 짓고, <strong>Bot</strong> 탭으로 들어갑니다. Token 영역이 있고, <strong>Reset Token</strong> 버튼이 있거든요. 클릭하면 긴 문자열이 나옵니다. <em>이게 봇의 진짜 열쇠다. 한 번 발급받고 창 닫으면 다시 못 본다.</em> 바로 복사해서 안전한 곳에 저장할 것.</p>
+
+    <p>그리고 같은 Bot 탭의 <strong>Privileged Gateway Intents</strong> 섹션에서 <strong>MESSAGE CONTENT INTENT</strong>를 켭니다. 이거 안 켜면 봇이 메시지 본문을 못 읽거든요. 디스코드가 개인정보 보호한다고 기본은 꺼놓는 겁니다.</p>
+
+    <div class="pullquote">
+      봇 토큰은 곧 봇 그 자체다. 유출되면 남의 손에 토끼를 넘기는 것과 같다.
+    </div>
+
+    <h3>2-2. OAuth2 URL Generator — Scope와 Permission</h3>
+
+    <p>봇은 스스로 서버에 들어갈 수 없거든요. 누가 초대해줘야 합니다. Developer Portal → <strong>OAuth2</strong> → <strong>URL Generator</strong>로 가면 체크박스가 잔뜩 있어요.</p>
+
+    <p><strong>첫 번째 박스: Scopes (봇이 어떤 자격으로 들어오는지)</strong></p>
+
+    <div class="comparison">
+      <table>
+        <tr><th>체크</th><th>항목</th><th>뜻</th></tr>
+        <tr><td class="pass">✅</td><td><code class="inline">bot</code></td><td>봇으로 서버에 상주 (필수)</td></tr>
+        <tr><td class="pass">✅</td><td><code class="inline">applications.commands</code></td><td>/reset 같은 슬래시 명령어 쓸 수 있게</td></tr>
+      </table>
+    </div>
+
+    <p>나머지 scope(<code class="inline">identify</code>, <code class="inline">email</code>, <code class="inline">guilds</code> 등)는 <strong>절대 체크하지 마세요</strong>. 저건 사용자 로그인 기능용이라, 봇 초대 URL에 들어가면 이상한 동의 창이 추가로 떠서 혼란만 줍니다.</p>
+
+    <p><strong>두 번째 박스: Bot Permissions (서버 안에서 뭘 할 수 있는지)</strong></p>
+
+    <p>이게 실제로 중요한 부분이거든요. 체크박스가 수십 개 있는데, <em>대화형 AI 봇 기준 최소 권한</em> 딱 이것만 체크:</p>
+
+    <div class="comparison">
+      <table>
+        <tr><th>권한</th><th>왜 필요한가</th></tr>
+        <tr><td><strong>View Channels</strong></td><td>채널 존재를 봐야 메시지를 받는다</td></tr>
+        <tr><td><strong>Send Messages</strong></td><td>답장 보내기 (당연)</td></tr>
+        <tr><td><strong>Send Messages in Threads</strong></td><td>스레드 안에서 답하기</td></tr>
+        <tr><td><strong>Read Message History</strong></td><td>과거 대화 맥락 읽기. 없으면 매 메시지마다 기억이 0이다</td></tr>
+        <tr><td><strong>Add Reactions</strong></td><td>👀 이모지로 "메시지 받았음" 표시</td></tr>
+        <tr><td><strong>Attach Files</strong></td><td>파일/이미지 첨부 답변</td></tr>
+        <tr><td><strong>Embed Links</strong></td><td>예쁜 카드 형태 응답</td></tr>
+        <tr><td><strong>Use External Emojis</strong></td><td>다른 서버의 커스텀 이모지로 반응하기</td></tr>
+        <tr><td><strong>Manage Messages</strong></td><td>자기가 단 실수 메시지 수정/삭제</td></tr>
+        <tr><td><strong>Manage Threads</strong></td><td>스레드 이름 변경/닫기</td></tr>
+        <tr><td><strong>Create Public Threads</strong></td><td>긴 답변 스레드로 빼기</td></tr>
+      </table>
+    </div>
+
+    <p>체크 다 하고 내리면 Generator가 밑에 <strong>합산된 숫자</strong>를 자동으로 박아줍니다. 디스코드 권한은 비트 플래그 합이라서, 각 권한에 숫자가 있고(View=1024, Send=2048, History=65536 등) 체크한 것들 다 더한 값이 이 숫자거든요. 외울 필요는 없지만 <em>어떤 권한이 들어있는지는 알고 있어야</em> 문제 생겼을 때 원인 찾는 겁니다.</p>
+
+    <h3>2-3. 절대 주지 말아야 할 권한</h3>
+
+    <div class="comparison">
+      <table>
+        <tr><th>권한</th><th>왜 위험한가</th></tr>
+        <tr><td class="fail">Administrator</td><td>전체 서버 관리자. 봇이 탈취되거나 버그 나면 <strong>서버가 삭제될 수 있다</strong>. AI 버그 하나 때문에 2년 치 커뮤니티를 날릴 수 있는 것이다</td></tr>
+        <tr><td class="fail">Kick/Ban Members</td><td>멤버 추방. AI가 자동으로 쓸 일 없음</td></tr>
+        <tr><td class="fail">Manage Channels</td><td>채널 생성/삭제. 실수로 채널 날릴 수 있음</td></tr>
+        <tr><td class="fail">Manage Server</td><td>서버 이름/아이콘 변경. AI 봇이 건드릴 일 없음</td></tr>
+        <tr><td class="fail">Manage Roles</td><td>역할 부여/회수. 권한 상승 경로가 됨</td></tr>
+        <tr><td class="fail">Manage Webhooks</td><td>외부 연동 조작. 다른 봇 우회 경로가 됨</td></tr>
+      </table>
+    </div>
+
+    <p>편하다고 Administrator에 체크하지 말 것. 스택오버플로우나 블로그에서 "그냥 Administrator 주면 된다"는 글 많은데, 그건 개발자 귀찮아서 쓴 조언이지 운영 관점에선 자살 버튼이거든요.</p>
+
+    <div class="pullquote">
+      권한은 "필요 최소한"이 원칙이다. 부족하면 나중에 더 주면 된다. 너무 많이 주면 회수하기 어렵다.
+    </div>
+
+    <h3>2-4. 초대 URL을 클릭한 이후의 흐름</h3>
+
+    <p>Generator 밑에 URL이 하나 만들어집니다. 이런 모양이거든요:</p>
+
+    <div class="code-block"><code>https://discord.com/oauth2/authorize?client_id=&lt;봇_ID&gt;&permissions=&lt;숫자&gt;&scope=bot+applications.commands</code></div>
+
+    <p>이 URL을 <strong>로그인된 브라우저에서</strong> 클릭하면 디스코드가 순서대로 창을 띄워요.</p>
+
+    <p><strong>① 서버 선택 화면</strong></p>
+
+    <p>"봇 이름을(를) 어느 서버에 추가하시겠습니까?" 드롭다운이 뜨는데, 본인이 <em>"서버 관리" 권한이 있는 서버만</em> 여기 나옵니다. 멤버 자격만 있는 서버는 안 뜨거든요.</p>
+
+    <p><strong>② 권한 확인 화면</strong></p>
+
+    <p>"봇 이름에게 다음 권한을 허용합니다:" 뜨고, 아까 체크한 것들이 전부 나열돼요. 여기서 각 권한을 <em>체크박스로 수정 가능합니다</em>. URL에 넣은 건 기본값일 뿐, 최종 결정은 이 화면에서 하거든요.</p>
+
+    <p><strong>③ "이메일 인증 필요" 경고</strong></p>
+
+    <p>본인 디스코드 계정의 이메일이 인증 안 돼있으면 <strong>승인 버튼이 회색</strong>으로 비활성화되고 이 경고가 뜹니다:</p>
+
+    <div class="note">
+      ⚠️ 이 봇을 서버에 추가하려면 이메일 주소를 인증해야 해요.
+    </div>
+
+    <p>해결법: 디스코드 설정 → 내 계정 → 이메일 옆 <strong>"확인"</strong> 버튼 → 메일함에서 링크 클릭 → 다시 돌아와서 새로고침. 1분이면 끝나는데, 이걸 모르면 한 시간을 헤맬 수도 있거든요. 저는 30분 헤맸습니다.</p>
+
+    <p><strong>④ 승인 완료</strong></p>
+
+    <p>로봇 확인 한 번 나오고, 끝나면 자기 서버 멤버 목록에 봇이 들어와 있어요. 처음엔 <em>오프라인(회색)</em>일 겁니다. Hermes gateway가 켜져야 초록색(온라인)으로 바뀌거든요.</p>
+
+    <h3>2-5. 권한 나중에 바꾸는 법</h3>
+
+    <p>초대 후에도 권한 조정은 가능합니다. 디스코드 서버에서:</p>
+
+    <ol>
+      <li>서버 이름 우클릭 → <strong>서버 설정</strong> → <strong>역할</strong></li>
+      <li>자동 생성된 봇 역할 클릭</li>
+      <li>권한 토글 켜고/끄기</li>
+      <li>바로 적용됨 (Hermes랑 무관)</li>
+    </ol>
+
+    <p>"너무 많이 줬다" 싶은 권한은 여기서 사후 회수. 좋은 백업 안전장치거든요.</p>
+
+    <h3>2-6. Hermes에 봇 토큰 꽂기</h3>
+
+    <p><code class="inline">~/.hermes/.env</code> 파일을 엽니다. 맨 밑에 세 줄을 추가하거든요:</p>
+
+    <div class="code-block"><code>DISCORD_BOT_TOKEN=<span class="string">&lt;2-1에서_복사한_토큰&gt;</span>
+DISCORD_REQUIRE_MENTION=<span class="flag">true</span>
+DISCORD_AUTO_THREAD=<span class="flag">false</span></code></div>
+
+    <p>각 줄의 의미:</p>
+
+    <ul>
+      <li><strong>토큰</strong>: 봇의 주민등록증. 이게 전부입니다</li>
+      <li><strong>require_mention</strong>: <code class="inline">@봇이름</code> 하고 부를 때만 반응. 안 이러면 봇이 채널 모든 대화에 끼어들거든요. 눈치 없는 동거인이 되는 거다</li>
+      <li><strong>auto_thread</strong>: 답할 때마다 스레드 새로 파지 마라. 안 끄면 대화 한 번에 스레드 하나씩 생겨서 <em>서버가 스레드로 도배됩니다</em></li>
+    </ul>
+
+    <p>그리고 <code class="inline">~/.hermes/config.yaml</code>에서 display 섹션을 찾아 이렇게 바꿉니다:</p>
+
+    <div class="code-block"><code><span class="flag">display:</span>
+  tool_progress: <span class="string">none</span>
+  interim_assistant_messages: <span class="flag">false</span>
+  show_reasoning: <span class="flag">false</span>
+  streaming: <span class="flag">true</span></code></div>
+
+    <p>이걸 왜 하냐면, 기본 설정으로 두면 봇이 대답하기 전에 <strong>자기 속을 다 보여주거든요</strong>. 디스코드 채팅창에 이런 게 주르륵 뜹니다:</p>
+
+    <div class="code-block"><code><span class="comment">📖 read_file: ~/.hermes/memories/knowledge-base/con...
+📖 read_file: ~/.hermes/memories/knowledge-base/ops...
+🔎 search_files: "예약"
+🔎 search_files: "문의|상담"</span></code></div>
+
+    <p>이게 개발자한테는 재밌는 정보지만, 일반 사용자한테는 <em>공포영화 스크립트</em>처럼 보여요. 그래서 끕니다.</p>
+
+    <h3>2-7. Gateway 켜기</h3>
+
+    <div class="code-block"><code><span class="command">$ hermes gateway start</span>
+<span class="command">$ hermes gateway status</span>
+<span class="success">✓ Gateway service is loaded</span></code></div>
+
+    <p>10초쯤 기다리고 상태를 보면 "loaded + PID" 나옵니다. 로그는 여기 쌓이거든요:</p>
+
+    <div class="code-block"><code><span class="command">$ tail -f ~/.hermes/logs/gateway.log</span></code></div>
+
+    <p>실시간으로 뭔가 움직이는 게 보여요. 잠자던 고양이가 한쪽 눈 뜬 것처럼 깜빡이는 숫자들입니다.</p>
+
+    <h2>3부. 토끼가 말을 안 할 때</h2>
+
+    <p>여기까지 했으면 디스코드 서버 멤버 목록에서 봇이 <strong>초록색(온라인)</strong>으로 뜹니다. 신기해서 바로 말 걸어봐요.</p>
+
+    <div class="code-block"><code><span class="comment">나: 안녕
+봇: ...</span></code></div>
+
+    <p>아무 말도 없습니다. 이상해요. 온라인인데 왜 답이 없지? 로그를 열어봅니다.</p>
+
+    <div class="code-block"><code><span class="comment">WARNING gateway.run: Unauthorized user: &lt;내_ID&gt; (&lt;내_이름&gt;) on discord</span></code></div>
+
+    <p>Unauthorized. 허가되지 않은 사용자.</p>
+
+    <div class="pullquote">
+      내가 내 봇한테 내가 허가되지 않은 사용자라는 것이다.
+    </div>
+
+    <p>이걸 <strong>pairing</strong>이라고 합니다. Hermes의 철학인데, 봇이 아무한테나 답하면 스팸이 되고 비용이 들고 남용되거든요. 그래서 기본적으로 <em>승인된 사람만</em> 대화할 수 있게 돼있습니다. 일종의 비밀 악수 같은 것이다.</p>
+
+    <h3>pairing 하는 법</h3>
+
+    <ol>
+      <li>사용자가 디스코드에서 봇에게 <strong>DM</strong> 한 번 보낸다 (내용은 뭐든 상관없음)</li>
+      <li>봇이 이렇게 답장한다:
+        <div class="note">
+          Hi~ I don't recognize you yet!<br>
+          Here's your pairing code: <strong>XXXXXXXX</strong><br>
+          Ask the bot owner to run:<br>
+          <code class="inline">hermes pairing approve discord XXXXXXXX</code>
+        </div>
+      </li>
+      <li>운영자가 맥미니 터미널에서 시키는 대로 친다:
+        <div class="code-block"><code><span class="command">$ hermes pairing approve discord XXXXXXXX</span></code></div>
+      </li>
+      <li>끝. 이제부터 그 사용자는 <strong>모든 서버에서</strong> 이 봇과 대화할 수 있다.</li>
+    </ol>
+
+    <p>pairing은 서버별이 아니라 <em>사용자별</em>입니다. 한 번 승인하면 A 서버에서도, B 서버에서도, DM에서도 다 되거든요.</p>
+
+    <div class="pullquote">
+      pairing은 번거롭지만 한 번만 하면 된다. 봉인을 푸는 의식 같은 것이다.
+    </div>
+
+    <h2>4부. 우리가 걸린 함정 네 가지</h2>
+
+    <p>일이 이게 끝이면 좋았을 텐데, 그렇지 않았습니다. 실전은 늘 뒷장이 더 두껍거든요.</p>
+
+    <h3>함정 1. "분명히 승인했는데 왜 여전히 무응답?"</h3>
+
+    <p>알고 보니 <strong>디스코드 계정이 두 개</strong>였어요. 하나는 평소 쓰는 닉네임 계정, 하나는 실명으로 만든 테스트 계정. 승인은 첫 번째에만 했는데, 테스트할 때는 두 번째 계정으로 들어가서 말을 걸었던 겁니다.</p>
+
+    <p>해결 방법은 두 가지:</p>
+
+    <ul>
+      <li>두 번째 계정으로도 DM → 코드 받기 → 승인</li>
+      <li>또는 <code class="inline">~/.hermes/pairing/discord-approved.json</code>에 사용자 ID를 직접 추가</li>
+    </ul>
+
+    <div class="code-block"><code><span class="command">$ python3 &lt;&lt;'EOF'</span>
+<span class="command">import json, time, os</span>
+<span class="command">path = os.path.expanduser("~/.hermes/pairing/discord-approved.json")</span>
+<span class="command">with open(path) as f: d = json.load(f)</span>
+<span class="command">d["&lt;사용자_ID&gt;"] = {"user_name": "&lt;이름&gt;", "approved_at": time.time()}</span>
+<span class="command">with open(path, "w") as f: json.dump(d, f, indent=2, ensure_ascii=False)</span>
+<span class="command">EOF</span>
+
+<span class="command">$ hermes gateway restart</span>  <span class="comment"># 반드시 재시작해야 반영</span></code></div>
+
+    <p>후자가 빠른데, <em>재시작 꼭 해야 반영됩니다</em>. 이거 안 하면 파일만 고치고 왜 안 되냐고 30분 더 헤매게 되거든요. 저는 헤맸습니다.</p>
+
+    <h3>함정 2. "갑자기 connection timeout"</h3>
+
+    <p>첫 실행 때 로그에 이런 게 뜹니다:</p>
+
+    <div class="code-block"><code><span class="comment">ERROR gateway.platforms.discord: [Discord] Timeout waiting for connection to Discord
+WARNING gateway.run: ✗ discord failed to connect</span></code></div>
+
+    <p>심장이 내려앉아요. 근데 30초쯤 기다리면 자동으로 재시도하고, 두 번째에 붙습니다. 이게 Hermes의 설계거든요. <em>실패를 부끄러워하지 않고 조용히 다시 시도하는 것.</em></p>
+
+    <p>원인은 스킬을 많이 로드해놨을 때 각 스킬이 디스코드 slash command를 등록하려고 해서 그 작업이 30초를 넘기기 때문입니다. 디스코드는 한 봇당 slash command 100개 제한이 있는데, 초과분은 등록 안 되고 경고만 찍혀요. 경고지 에러가 아니거든요.</p>
+
+    <h3>함정 3. "왜 영어로 답하지"</h3>
+
+    <p>한국어 페르소나로 만든 봇인데 처음 몇 번은 영어로 답했습니다.</p>
+
+    <p>이유는 단순하거든요. <strong>제가 영어로 말을 걸었기 때문</strong>입니다. AI는 상대 언어를 따라가는 성질이 있어서, <code class="inline">hi</code>라고 하면 <code class="inline">Hi! How can I help?</code>가 돌아옵니다. <code class="inline">안녕</code>이라고 하면 한국어가 돌아오고요.</p>
+
+    <p>언어는 대화의 첫 문장이 결정하는 것이다. 이걸 깨닫고 나니까 억울하지 않았습니다.</p>
+
+    <h3>함정 4. "대답 앞에 이상한 시스템 메시지"</h3>
+
+    <p>봇이 처음 말 걸 때 이런 걸 뱉거든요:</p>
+
+    <div class="note">
+      📬 No home channel is set for Discord. A home channel is where Hermes delivers cron job results and cross-platform messages.<br>
+      Type /sethome to make this chat your home channel, or ignore to skip.
+    </div>
+
+    <p>영어입니다. 갑자기 영어예요. 여기서 멘붕이 올 수 있거든요. "내 봇이 왜 영어를 하지?"</p>
+
+    <p>이건 Hermes의 <strong>시스템 온보딩 메시지</strong>입니다. 페르소나와 무관하게 처음 한 번 뜨는 거거든요. 무시하고 다음 메시지 보내면 되고, 정말 안 뜨게 하려면 <code class="inline">/sethome</code>으로 홈 채널 하나 지정해주면 됩니다. cron 결과를 받을 채널 같은 걸 여기로 설정하는 것이다.</p>
+
+    <h2>5부. 어쨌든</h2>
+
+    <p>이제 디스코드 구석에 토끼 한 마리가 살고 있습니다. 누가 부르면 대답하고, 아니면 조용히 있거든요. 말대꾸는 안 합니다. 화도 안 내고요. 누가 밤 12시에 "내일 일정 알려줘" 하면 연결된 시스템을 찔러서 답을 가져옵니다.</p>
+
+    <p>근데 생각해보면, 이 모든 구조가 되게 우아해요.</p>
+
+    <p>디스코드 입장에서는 <em>그냥 봇 하나 더 들어온 것</em>이고, Hermes 입장에서는 <em>또 하나의 플랫폼을 연결한 것</em>이고, 제 입장에서는 <em>토끼한테 채팅창을 준 것</em>일 뿐이거든요. 각자의 역할이 분명하고, 서로 간섭하지 않습니다. 좋은 협업은 그래야 하는 것 같아요.</p>
+
+    <p>설치 자체는 총 <strong>15분</strong>쯤 걸립니다. 사용자 pairing 시간까지 합쳐도 <strong>20분</strong>. 처음 하는 사람은 함정들 때문에 2시간이 될 수도 있지만, 이 글을 따라 하면 40분이거든요. 이 40분이 "미래의 당신이 매일 여러 번 대화할 동거인"을 만드는 시간이라고 생각하면 나쁘지 않은 투자입니다.</p>
+
+    <div class="divider"></div>
+
+    <p>지난번엔 Keychain이라는 금고의 벽 앞에서 7번 실패하고 호텔을 바꿨습니다. 이번엔 그 AI를 디스코드라는 채팅방에 앉히면서 <strong>4가지 함정</strong>에 빠졌고, <strong>2개의 계정</strong> 사이에서 헤맸고, <strong>30초짜리 타임아웃</strong>에 심장이 내려앉았거든요.</p>
+
+    <p>돌이켜 보면 이번에도 똑같았습니다. 기술적으로 어려운 일은 없었어요. 그냥 <em>디스코드가 어떤 방식으로 돌아가는지 모르고 있었을 뿐</em>입니다. pairing이 뭔지 몰랐고, permission이 비트 플래그라는 걸 몰랐고, 이메일 인증이 막는 벽이라는 걸 몰랐습니다.</p>
+
+    <p><strong>문제는 늘 "모른다"는 것이었지 "어렵다"는 게 아니었습니다.</strong></p>
+
+    <p>지금 이 순간에도 맥미니 안에서 Hermes가 조용히 숨 쉬고 있고, 디스코드 구석에는 토끼 한 마리가 초록색으로 빛나고 있거든요. 가끔 누가 <code class="inline">@Dami 안녕</code> 하면, 🥕 이모지랑 같이 답을 해요.</p>
+
+    <p>어쨌든, 나쁘지 않은 동거인이 하나 더 생긴 것이다.</p>
+
+    <div class="divider"></div>
+
+    <h2>Appendix — 치트시트</h2>
+
+    <div class="comparison">
+      <table>
+        <tr><th>하고 싶은 일</th><th>명령어</th></tr>
+        <tr><td>봇 살아있는지 확인</td><td><code class="inline">hermes gateway status</code></td></tr>
+        <tr><td>꺼졌으면 켜기</td><td><code class="inline">hermes gateway start</code></td></tr>
+        <tr><td>설정 바꾸고 반영</td><td><code class="inline">hermes gateway restart</code></td></tr>
+        <tr><td>로그 실시간 보기</td><td><code class="inline">tail -f ~/.hermes/logs/gateway.log</code></td></tr>
+        <tr><td>에러만 보기</td><td><code class="inline">tail -f ~/.hermes/logs/gateway.error.log</code></td></tr>
+        <tr><td>새 사용자 승인</td><td><code class="inline">hermes pairing approve discord &lt;code&gt;</code></td></tr>
+        <tr><td>승인된 사람 목록</td><td><code class="inline">hermes pairing list</code></td></tr>
+        <tr><td>사용자 내보내기</td><td><code class="inline">hermes pairing revoke discord &lt;user_id&gt;</code></td></tr>
+      </table>
+    </div>
+
+    <div class="comparison">
+      <table>
+        <tr><th>설정 파일</th><th>뭘 바꿀 때 여나</th></tr>
+        <tr><td><code class="inline">~/.hermes/.env</code></td><td>봇 토큰, 디스코드 동작 옵션</td></tr>
+        <tr><td><code class="inline">~/.hermes/config.yaml</code></td><td>display 설정, 모델 설정</td></tr>
+        <tr><td><code class="inline">~/.hermes/skills/&lt;봇&gt;/SKILL.md</code></td><td>페르소나 + 트리거 키워드</td></tr>
+        <tr><td><code class="inline">~/.hermes/pairing/discord-approved.json</code></td><td>승인 사용자 목록</td></tr>
+        <tr><td><code class="inline">~/.hermes/logs/gateway.error.log</code></td><td>문제 생겼을 때 1번지</td></tr>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>
+      이 글은 <a href="https://cpuxp11.github.io/hermes-codex-story/">지난 Keychain 이야기</a>의 후속편입니다.
+      심은 AI를 꺼내놓는 과정을 기록해둔 건데, 다음엔 그 AI에게 회사의 업무 지도를 그려주는 이야기로 이어질 것 같거든요.
+      <br><br>
+      <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> &middot;
+      <a href="https://discord.com/developers/applications">Discord Developer Portal</a>
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>
